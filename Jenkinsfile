@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DEPLOY_DIR = '/opt/lampp/htdocs/my-static-site'
+        DEPLOY_DIR = 'C:\\xampp\\htdocs\\my-static-site'  // XAMPP default path on Windows
     }
 
     stages {
@@ -20,9 +20,9 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh """
-                    mkdir -p ${DEPLOY_DIR}
-                    cp -v *.html ${DEPLOY_DIR}
+                bat """
+                if not exist "%DEPLOY_DIR%" mkdir "%DEPLOY_DIR%"
+                copy /Y *.html "%DEPLOY_DIR%"
                 """
             }
         }
@@ -30,7 +30,7 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment to XAMPP successful!'
+            echo 'Deployment to XAMPP on Windows successful!'
         }
         failure {
             echo 'Deployment failed.'
